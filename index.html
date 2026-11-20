@@ -144,7 +144,7 @@
         }
         .nav-links a:hover { color: #1e293b; background: rgba(0, 0, 0, 0.03); }
         .nav-links li.active a { color: #1e3a8a; background: var(--brand-blue-bg); font-weight: 700; border: 1px solid var(--brand-blue-border); }
-        .nav-links li.locked a { opacity: 0.65; cursor: not-allowed; }
+        .nav-links li.locked a { opacity: 0.85; cursor: pointer; }
         .nav-links .step-badge {
             width: 22px; height: 22px; border-radius: 50%; background: #f1ede6; color: #78716c;
             border: 1px solid #e5dfd5; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
@@ -184,7 +184,7 @@
         .step-item.active {
             border: 1px solid var(--brand-blue-border); background: var(--brand-blue-bg);
         }
-        .step-item.locked { opacity: 0.65; cursor: not-allowed; }
+        .step-item.locked { opacity: 0.85; cursor: pointer; }
         .step-bubble {
             width: 26px; height: 26px; border-radius: 50%; background: #f5f2eb; color: #78716c; border: 1px solid #e7e1d7;
             font-weight: 700; font-size: 11.5px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0;
@@ -1615,22 +1615,8 @@
         // STEP NAVIGATION & GATEKEEPING (4-STEP STREAMLINED PIPELINE)
         // =====================================================================
         function tryNavigateStep(step) {
-            // Cho phép bấm trực tiếp vào mục "4. Dashboard & Báo Cáo" ngay khi đã có dữ liệu ở Bước 3
-            if (step === 4) {
-                if (unlockedStep >= 3 || (pipelineData && (pipelineData.step5 || pipelineData.step4 || pipelineData.step3))) {
-                    unlockedStep = Math.max(unlockedStep, 4);
-                    goToStep(4);
-                    return;
-                }
-            }
-            if (step > unlockedStep) {
-                const wantUnlock = confirm(`Bước ${step} chưa được mở khóa theo tiến trình tuần tự. Bạn có muốn MỞ KHÓA NHANH để xem và thao tác Bước ${step} ngay không?`);
-                if (wantUnlock) {
-                    unlockedStep = Math.max(unlockedStep, step);
-                    goToStep(step);
-                }
-                return;
-            }
+            // Chuyển bước mượt mà tức thì khi người dùng bấm vào bất kỳ tab nào
+            unlockedStep = Math.max(unlockedStep, step);
             goToStep(step);
         }
 
